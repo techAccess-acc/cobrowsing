@@ -1,0 +1,4 @@
+#cobar { position: fixed; top: 10px; right: 10px; z-index: 999999; background: rgba(20,20,20,.8); color: #fff; padding: 8px 10px; border-radius: 8px; font: 14px system-ui; display: flex; gap: 8px; align-items: center; }
+#cobar button { background: #4b8; border: 0; color: #031; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+#cobar .status { opacity: .8; }
+.cob-pointer { position: absolute; width: 16px; height: 16px; border-radius: 50%; background: red; pointer-events: none; mix-blend-mode: multiply; }

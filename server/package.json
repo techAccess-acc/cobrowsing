@@ -1,0 +1,21 @@
+{
+    "name": "surfly-demo-server",
+    "version": "0.1.0",
+    "type": "commonjs",
+    "dependencies": {
+        "cookie": "^1.0.2",
+        "express": "^4.21.2",
+        "http-proxy-middleware": "^3.0.5",
+        "morgan": "^1.10.0",
+        "uuid": "^9.0.1",
+        "ws": "^8.18.0"
+    },
+    "description": "",
+    "main": "audit.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
