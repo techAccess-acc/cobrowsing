@@ -8,7 +8,7 @@
         "http-proxy-middleware": "^3.0.5",
         "morgan": "^1.10.0",
         "uuid": "^9.0.1",
-        "ws": "^8.18.0"
+        "ws": "^8.18.3"
     },
     "description": "",
     "main": "audit.js",

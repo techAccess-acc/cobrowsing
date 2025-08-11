@@ -1,58 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Local Co-browse Demo</title>
+  <meta charset="UTF-8" />
+  <title>Local Co‑browse Demo</title>
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      padding: 8px;
-      background: #222;
-      color: #fff;
-      display: flex;
-      gap: 8px;
-    }
-    input[type=text] {
-      flex: 1;
-      padding: 6px;
-      font-size: 14px;
-    }
-    button {
-      padding: 6px 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    iframe {
-      flex: 1;
-      border: none;
-      width: 100%;
-    }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; height: 100vh; display: flex; flex-direction: column; }
+    header { display: flex; gap: 8px; padding: 10px; background: #111; color: #fff; align-items: center; }
+    input[type=text] { flex: 1; padding: 8px; font-size: 14px; }
+    button { padding: 8px 12px; font-size: 14px; cursor: pointer; }
+    #sid { background: #222; color: #ddd; padding: 6px 8px; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    iframe { flex: 1; border: 0; width: 100%; }
   </style>
 </head>
 <body>
   <header>
-    <input type="text" id="targetUrl" placeholder="Enter website URL (https://...)" />
+    <div>URL</div>
+    <input id="targetUrl" type="text" placeholder="https://news.ycombinator.com" />
     <button id="startBtn">Start Session</button>
+    <button id="guestBtn" disabled>Open Guest Window</button>
+    <div>SID: <span id="sid"></span></div>
   </header>
   <iframe id="view"></iframe>
 
   <script>
-    document.getElementById('startBtn').addEventListener('click', () => {
-      const rawUrl = document.getElementById('targetUrl').value.trim();
-      if (!rawUrl) {
-        alert('Enter a URL starting with https://');
+    const sidEl = document.getElementById('sid');
+    const sid = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36));
+    sidEl.textContent = sid;
+
+    const view = document.getElementById('view');
+    const input = document.getElementById('targetUrl');
+    const startBtn = document.getElementById('startBtn');
+    const guestBtn = document.getElementById('guestBtn');
+
+    function start(url) {
+      const u = `/proxy?sid=${encodeURIComponent(sid)}&url=${encodeURIComponent(url)}`;
+      view.src = u;
+      guestBtn.disabled = false;
+      // persist for the guest opener
+      sessionStorage.setItem('lastUrl', url);
+      sessionStorage.setItem('lastSid', sid);
+    }
+
+    startBtn.onclick = () => {
+      const raw = input.value.trim();
+      if (!/^https?:\/\//i.test(raw)) {
+        alert('Enter a full URL starting with https://');
         return;
       }
-      // Encode and set iframe src to the /proxy endpoint
-      const encoded = encodeURIComponent(rawUrl);
-      document.getElementById('view').src = `/proxy?url=${encoded}`;
-    });
+      start(raw);
+    };
+
+    guestBtn.onclick = () => {
+      const lastUrl = sessionStorage.getItem('lastUrl');
+      const lastSid = sessionStorage.getItem('lastSid');
+      const guestUrl = `${location.origin}/proxy?sid=${encodeURIComponent(lastSid)}&url=${encodeURIComponent(lastUrl)}`;
+      window.open(guestUrl, '_blank', 'noopener,noreferrer');
+    };
+
+    // Convenience: prefill a simple site
+    input.value = 'https://news.ycombinator.com';
   </script>
 </body>
 </html>
