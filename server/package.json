@@ -13,7 +13,7 @@
     "description": "",
     "main": "audit.js",
     "scripts": {
-        "start": "node app.js"
+        "start": "node server/app.js"
     },
     "keywords": [],
     "author": "",
